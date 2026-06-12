@@ -209,8 +209,6 @@ python multiplicador.py
 
 O projeto permite comparar o desempenho da execução sequencial com a execução paralela utilizando diferentes quantidades de processos.
 
-Exemplo:
-
 ```text
 1 processo  → 114,87 segundos
 2 processo → 70,91 segundos
