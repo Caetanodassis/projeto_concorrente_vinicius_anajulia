@@ -225,11 +225,11 @@ O projeto permite comparar o desempenho da execução sequencial com a execuçã
 Exemplo:
 
 ```text
-1 processo  → X segundos
-2 processos → Y segundos
-4 processos → Z segundos
-8 processos → ...
-12 processos → ...
+1 processo  → 114,87 segundos
+2 processos → 70,91 segundos
+4 processos → 43,74 segundos
+8 processos → 32,31 segundos
+12 processos → 26,94 segundos
 ```
 
 Esses resultados permitem avaliar o impacto do paralelismo na análise de grandes arquivos de log.
