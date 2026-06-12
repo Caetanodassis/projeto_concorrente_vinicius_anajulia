@@ -225,14 +225,37 @@ O projeto permite comparar o desempenho da execução sequencial com a execuçã
 Exemplo:
 
 ```text
-1 processo  → 114,87 segundos
-2 processos → 70,91 segundos
-4 processos → 43,74 segundos
-8 processos → 32,31 segundos
-12 processos → 26,94 segundos
+1 thread  → 114,87 segundos
+2 thread → 70,91 segundos
+4 thread → 43,74 segundos
+8 thread → 32,31 segundos
+12 thread → 26,94 segundos
 ```
 
 Esses resultados permitem avaliar o impacto do paralelismo na análise de grandes arquivos de log.
+
+---
+# Speedup
+
+```text
+1 thread  → 1,00x (Base)
+2 thread → 1,62x
+4 thread → 2,63x
+8 thread → 3,55x
+12 thread → 4,26x
+```
+---
+# Eficiência
+
+```text
+1 thread  → 100,0%
+2 thread → 81,0%
+4 thread → 65,7%
+8 thread → 44,4%
+12 thread → 35,5%
+```
+---
+# Gráficos
 
 ---
 
