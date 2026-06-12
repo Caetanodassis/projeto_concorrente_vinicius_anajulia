@@ -255,9 +255,9 @@ Esses resultados permitem avaliar o impacto do paralelismo na análise de grande
 12 thread → 35,5%
 ```
 ---
-# Gráficos
+# 📉 Gráficos de Desempenho
 
-speedup_eficiencia.png
+![Gráfico de Speedup e Eficiência](speedup_eficiencia.png)
 
 ---
 
