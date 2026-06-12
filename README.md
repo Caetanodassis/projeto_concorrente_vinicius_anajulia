@@ -99,23 +99,23 @@ projeto-logs/
 
 ## Etapa 1 — Carregamento dos Dados
 
-O sistema carrega:
-
-- Arquivo de log (`access.log`)
-- Arquivo de hostnames (`client_hostname.csv`)
+O script lê o arquivo ```client_hostname.csv``` e monta um dicionário estruturado ```ip_to_host: dict[str, str]```. Essa operação é puramente sequencial e ocorre antes do processamento pesado.
 
 ---
 
-## Etapa 2 — Identificação de Falhas
+## Etapa 2 — Divisão em Blocos (Chunking) e Gestão de Memória
 
-São considerados erros todos os códigos HTTP:
+Para evitar o carregamento de gigabytes de logs na RAM, a função ```iter_chunks``` lê o arquivo linha por linha e agrupa os dados em lotes configuráveis.
 
-```text
-4xx → Erros do Cliente
-5xx → Erros do Servidor
-```
+Configuração Adotada: ```CHUNK_SIZE = 50_000`` linhas por bloco.
 
-Expressão regular utilizada:
+Justificativa Técnica: Este tamanho foi escolhido estrategicamente após testes empíricos. Um bloco muito pequeno (ex: 1.000 linhas) geraria um overhead massivo de comunicação entre processos. Um bloco muito grande (ex: 500.000 linhas) saturaria a memória e diminuiria a granularidade do balanceamento de carga. O valor de 50.000 representa o equilíbrio perfeito entre o uso de memória e a minimização do custo de sincronização.
+
+---
+
+## Etapa 3 — Processamento Paralelo e Regex
+
+Cada processo trabalhador (worker) recebe um bloco isolado de 50.000 linhas e executa a expressão regular compilada:
 
 ```python
 r"^(\d{1,3}(?:\.\d{1,3}){3}).*?\s([45]\d{2})\s"
@@ -123,22 +123,9 @@ r"^(\d{1,3}(?:\.\d{1,3}){3}).*?\s([45]\d{2})\s"
 
 ---
 
-## Etapa 3 — Contabilização
+## Etapa 4 — Redução (Reduce) e Ranking
 
-Para cada ocorrência:
-
-- Extrai o IP
-- Conta a ocorrência
-- Armazena em estrutura Counter
-
----
-
-## Etapa 4 — Ranking
-
-Ao final da execução:
-
-- Os IPs são ordenados pela quantidade de falhas
-- É exibido o Top 10 de IPs com mais erros
+O processo pai coleta os contadores de todos os blocos concluídos, funde-os em um contador global e exibe o Top 10 IPs com mais falhas, enriquecidos com seus respectivos hostnames.
 
 ---
 
@@ -225,11 +212,11 @@ O projeto permite comparar o desempenho da execução sequencial com a execuçã
 Exemplo:
 
 ```text
-1 thread  → 114,87 segundos
-2 thread → 70,91 segundos
-4 thread → 43,74 segundos
-8 thread → 32,31 segundos
-12 thread → 26,94 segundos
+1 processo  → 114,87 segundos
+2 processo → 70,91 segundos
+4 processo → 43,74 segundos
+8 processo → 32,31 segundos
+12 processo → 26,94 segundos
 ```
 
 Esses resultados permitem avaliar o impacto do paralelismo na análise de grandes arquivos de log.
@@ -238,21 +225,21 @@ Esses resultados permitem avaliar o impacto do paralelismo na análise de grande
 # Speedup
 
 ```text
-1 thread  → 1,00x (Base)
-2 thread → 1,62x
-4 thread → 2,63x
-8 thread → 3,55x
-12 thread → 4,26x
+1 processo  → 1,00x (Base)
+2 processo → 1,62x
+4 processo → 2,63x
+8 processo → 3,55x
+12 processo → 4,26x
 ```
 ---
 # Eficiência
 
 ```text
-1 thread  → 100,0%
-2 thread → 81,0%
-4 thread → 65,7%
-8 thread → 44,4%
-12 thread → 35,5%
+1 processo  → 100,0%
+2 processo → 81,0%
+4 processo → 65,7%
+8 processo → 44,4%
+12 processo → 35,5%
 ```
 ---
 # 📉 Gráficos de Desempenho
