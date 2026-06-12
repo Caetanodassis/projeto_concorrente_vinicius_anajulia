@@ -107,7 +107,7 @@ O script lê o arquivo ```client_hostname.csv``` e monta um dicionário estrutur
 
 Para evitar o carregamento de gigabytes de logs na RAM, a função ```iter_chunks``` lê o arquivo linha por linha e agrupa os dados em lotes configuráveis.
 
-Configuração Adotada: ```CHUNK_SIZE = 50_000`` linhas por bloco.
+Configuração Adotada: ```CHUNK_SIZE = 50_000``` linhas por bloco.
 
 Justificativa Técnica: Este tamanho foi escolhido estrategicamente após testes empíricos. Um bloco muito pequeno (ex: 1.000 linhas) geraria um overhead massivo de comunicação entre processos. Um bloco muito grande (ex: 500.000 linhas) saturaria a memória e diminuiria a granularidade do balanceamento de carga. O valor de 50.000 representa o equilíbrio perfeito entre o uso de memória e a minimização do custo de sincronização.
 
