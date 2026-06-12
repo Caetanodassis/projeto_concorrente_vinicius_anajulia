@@ -1,4 +1,4 @@
-# 🔍 Web Server Log Analysis — Failed Request Detection (Versão Atualizada)
+# 🔍 Web Server Log Analysis — Failed Request Detection
 
 > Sistema acadêmico para análise de logs de servidores web utilizando conceitos de Programação Distribuída e Concorrente, com foco na identificação de requisições com falha, detecção de padrões suspeitos e avaliação de desempenho através de processamento paralelo.
 
