@@ -257,6 +257,8 @@ Esses resultados permitem avaliar o impacto do paralelismo na análise de grande
 ---
 # Gráficos
 
+speedup_eficiencia.png
+
 ---
 
 # 🧠 Conceitos Aplicados
