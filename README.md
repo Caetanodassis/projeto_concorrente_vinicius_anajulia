@@ -210,11 +210,11 @@ python multiplicador.py
 O projeto permite comparar o desempenho da execução sequencial com a execução paralela utilizando diferentes quantidades de processos.
 
 ```text
-1 processo  → 114,87 segundos
-2 processo → 70,91 segundos
-4 processo → 43,74 segundos
-8 processo → 32,31 segundos
-12 processo → 26,94 segundos
+1 processo  → 258,27 segundos
+2 processo → 143,83 segundos
+4 processo → 86,17 segundos
+8 processo → 61,45 segundos
+12 processo → 52,55 segundos
 ```
 
 Esses resultados permitem avaliar o impacto do paralelismo na análise de grandes arquivos de log.
@@ -224,20 +224,20 @@ Esses resultados permitem avaliar o impacto do paralelismo na análise de grande
 
 ```text
 1 processo  → 1,00x (Base)
-2 processo → 1,62x
-4 processo → 2,63x
-8 processo → 3,55x
-12 processo → 4,26x
+2 processo → 1,80x
+4 processo → 3,00x
+8 processo → 4,20x
+12 processo → 4,91x
 ```
 ---
 # Eficiência
 
 ```text
 1 processo  → 100,0%
-2 processo → 81,0%
-4 processo → 65,7%
-8 processo → 44,4%
-12 processo → 35,5%
+2 processo → 90,0%
+4 processo → 75,0%
+8 processo → 53,0%
+12 processo → 41,5%
 ```
 ---
 # 📉 Gráficos de Desempenho
