@@ -64,6 +64,18 @@ O sistema foi desenvolvido para aplicar na prática conceitos de:
 
 ---
 
+#  Ambiente Experimental
+
+| Item | Descrição |
+|------|----------|
+| Processador | Intel Core i7 (32 núcleos lógicos) |
+| Memória RAM | 16 GB |
+| Sistema Operacional | Windows 11 |
+| Linguagem | Python 3.x |
+
+
+---
+
 # 📂 Estrutura do Projeto
 
 ```text
