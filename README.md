@@ -1,82 +1,80 @@
 # 🔍 Web Server Log Analysis — Failed Request Detection
 
-> Sistema acadêmico para análise de logs de servidores web utilizando conceitos de Programação Distribuída e Concorrente, com foco na identificação de requisições com falha, detecção de padrões suspeitos e avaliação de desempenho através de processamento paralelo.
+> Sistema acadêmico para análise de logs de servidores web utilizando conceitos de **Programação Distribuída e Concorrente**, com foco na identificação de requisições com falha, detecção de padrões suspeitos e avaliação de desempenho através de processamento paralelo com **memory-mapped I/O**.
 
 ---
 
-# 👥 Integrantes
+## 👥 Integrantes
 
 | Nome | RA |
-|--------|--------|
+|------|-----|
 | Ana Júlia | 076130 |
 | Vinícius Caetano de Assis | 075753 |
 
 ---
 
-# 🎓 Informações Acadêmicas
+## 🎓 Informações Acadêmicas
 
 | Campo | Informação |
-|--------|--------|
+|-------|------------|
 | Curso | Análise e Desenvolvimento de Sistemas (ADS) |
 | Disciplina | Programação Distribuída e Concorrente |
 
 ---
 
-# 📌 Objetivo do Projeto
+## 📌 Objetivo do Projeto
 
-Este projeto tem como objetivo analisar grandes volumes de logs de servidores web para identificar requisições com falha (HTTP 4xx e 5xx), detectar possíveis padrões de comportamento suspeito e avaliar os ganhos de desempenho obtidos através do processamento paralelo.
+Este projeto analisa grandes volumes de logs de servidores web para identificar requisições com falha (HTTP 4xx e 5xx), detectar possíveis padrões de comportamento suspeito e avaliar os ganhos de desempenho obtidos através do processamento paralelo.
 
-O sistema foi desenvolvido para aplicar na prática conceitos de:
+O sistema aplica na prática os seguintes conceitos:
 
-- Programação Concorrente
-- Paralelismo
-- Sistemas Distribuídos
+- Programação Concorrente e Paralelismo
+- Multiprocessamento com `multiprocessing.Pool`
+- I/O ultra eficiente com `mmap` (memory-mapped file)
 - Processamento de Grandes Volumes de Dados
-- Análise de Logs
-- Balanceamento de Carga
+- Análise de Logs com Expressões Regulares
+- Balanceamento de Carga e Benchmark de Desempenho
 
 ---
 
-# 🚀 Funcionalidades
+## 🚀 Funcionalidades
 
-- Leitura de arquivos de log de servidores web
-- Identificação automática de códigos HTTP de erro
-- Contabilização de falhas por endereço IP
-- Associação IP → Hostname
-- Geração do ranking dos IPs com mais falhas
-- Processamento sequencial para comparação
-- Processamento paralelo utilizando multiprocessing
-- Medição de desempenho e comparação de tempos
-- Geração de grandes bases de teste para benchmark
+- Leitura de arquivos de log via **memory-mapped I/O** (`mmap`), sem carregar o arquivo inteiro na RAM
+- Divisão automática do arquivo em **chunks por byte-range**, garantindo distribuição uniforme entre processos
+- Identificação de códigos HTTP de erro (4xx e 5xx) com regex compatível com Apache e Nginx
+- Contabilização de falhas por endereço IP usando `collections.Counter`
+- Geração do **ranking dos IPs com mais erros** (Top 10)
+- Medição de desempenho com `time.perf_counter` comparando 1, 2, 4, 8 e 12 processos
+- Cálculo automático de **Speedup** e **Eficiência** em tempo real
 
 ---
 
-# 🛠 Tecnologias Utilizadas
+## 🛠 Tecnologias Utilizadas
 
 | Tecnologia | Finalidade |
 |------------|------------|
 | Python 3 | Linguagem principal |
-| Regex (re) | Extração de IPs e códigos HTTP |
-| CSV | Leitura do mapeamento IP → Hostname |
-| collections.Counter | Contagem eficiente |
-| multiprocessing | Execução paralela |
-| time | Benchmark de desempenho |
+| `re` (Regex) | Extração de IPs e códigos HTTP |
+| `mmap` | Leitura de arquivo via memória mapeada |
+| `collections.Counter` | Contagem eficiente de IPs |
+| `multiprocessing.Pool` | Execução paralela com múltiplos processos |
+| `os` | Obtenção do tamanho do arquivo e detecção de CPUs |
+| `time.perf_counter` | Benchmark de alta precisão |
 
 ---
 
-#  Ambiente Experimental
+## 💻 Ambiente Experimental
 
 | Item | Descrição |
-|------|----------|
+|------|-----------|
 | Processador | Intel Core i7 (32 núcleos lógicos) |
 | Memória RAM | 16 GB |
 | Sistema Operacional | Windows 11 |
 | Linguagem | Python 3.x |
 
-
 ---
 
-# 📂 Estrutura do Projeto
+## 📂 Estrutura do Projeto
 
 ```text
 projeto-logs/
@@ -87,16 +85,16 @@ projeto-logs/
 │   └── Gera ranking dos IPs com mais falhas
 │
 ├── paralelismo.py
-│   ├── Implementação paralela
-│   ├── Divide o log em blocos
-│   ├── Utiliza multiprocessing.Pool
-│   └── Compara desempenho entre diferentes quantidades de processos
+│   ├── Implementação paralela com mmap + multiprocessing
+│   ├── Divide o arquivo em byte-ranges por número de processos
+│   ├── Utiliza multiprocessing.Pool com imap_unordered
+│   └── Exibe Speedup e Eficiência por configuração de processos
 │
 ├── multiplicador.py
 │   ├── Ferramenta de geração de massa de testes
 │   └── Replica arquivos de log para aumentar o volume de dados
 │
-├── access.log
+├── access_log_base_maior.log
 │   └── Base principal de análise
 │
 ├── client_hostname.csv
@@ -107,109 +105,132 @@ projeto-logs/
 
 ---
 
-# 📊 Funcionamento
+## 📊 Como Funciona
 
-## Etapa 1 — Carregamento dos Dados
+### Etapa 1 — Divisão do Arquivo em Byte-Ranges
 
-O script lê o arquivo ```client_hostname.csv``` e monta um dicionário estruturado ```ip_to_host: dict[str, str]```. Essa operação é puramente sequencial e ocorre antes do processamento pesado.
-
----
-
-## Etapa 2 — Divisão em Blocos (Chunking) e Gestão de Memória
-
-Para evitar o carregamento de gigabytes de logs na RAM, a função ```iter_chunks``` lê o arquivo linha por linha e agrupa os dados em lotes configuráveis.
-
-Configuração Adotada: ```CHUNK_SIZE = 50_000``` linhas por bloco.
-
-Justificativa Técnica: Este tamanho foi escolhido estrategicamente após testes empíricos. Um bloco muito pequeno (ex: 1.000 linhas) geraria um overhead massivo de comunicação entre processos. Um bloco muito grande (ex: 500.000 linhas) saturaria a memória e diminuiria a granularidade do balanceamento de carga. O valor de 50.000 representa o equilíbrio perfeito entre o uso de memória e a minimização do custo de sincronização.
-
----
-
-## Etapa 3 — Processamento Paralelo e Regex
-
-Cada processo trabalhador (worker) recebe um bloco isolado de 50.000 linhas e executa a expressão regular compilada:
+A função `get_chunks` divide o arquivo em fatias com base no **tamanho em bytes**, não em linhas. Para `n_workers` processos, são criados `n_workers * 4` chunks, aumentando a granularidade e melhorando o balanceamento de carga.
 
 ```python
-r"^(\d{1,3}(?:\.\d{1,3}){3}).*?\s([45]\d{2})\s"
+def get_chunks(filepath, n_chunks):
+    size = os.path.getsize(filepath)
+    chunk_size = size // n_chunks
+    # cada chunk é definido por (filepath, start_byte, end_byte)
+```
+
+Esse modelo evita carregar o conteúdo na memória principal e garante que cada processo receba uma fatia proporcional do arquivo.
+
+---
+
+### Etapa 2 — Leitura com `mmap` (Memory-Mapped I/O)
+
+Cada processo trabalhador abre o arquivo com `mmap.ACCESS_READ`, posicionando o cursor diretamente no byte inicial do seu chunk via `mm.seek(start)`.
+
+```python
+with open(filepath, "rb") as f:
+    mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+    mm.seek(start)
+    if start != 0:
+        mm.readline()  # descarta linha parcial na junção de chunks
+```
+
+A chamada `mm.readline()` no início (quando `start != 0`) é essencial: garante que o processo não processe uma linha cortada ao meio pela divisão de bytes.
+
+---
+
+### Etapa 3 — Extração com Regex (Apache / Nginx)
+
+O padrão de regex foi escrito em modo `VERBOSE` para legibilidade e compilado uma única vez antes de ser usado por todos os processos:
+
+```python
+LOG_PATTERN = re.compile(
+    r"""
+    ^(?P<ip>\d{1,3}(?:\.\d{1,3}){3})   # IP
+    .*?                                 # qualquer coisa
+    \s(?P<status>[1-5]\d{2})\s          # código HTTP
+    """,
+    re.VERBOSE,
+)
+```
+
+Apenas erros **4xx e 5xx** são contabilizados:
+
+```python
+if 400 <= status <= 599:
+    counter[ip] += 1
 ```
 
 ---
 
-## Etapa 4 — Redução (Reduce) e Ranking
+### Etapa 4 — Redução e Ranking
 
-O processo pai coleta os contadores de todos os blocos concluídos, funde-os em um contador global e exibe o Top 10 IPs com mais falhas, enriquecidos com seus respectivos hostnames.
+O processo pai coleta os `Counter`s de todos os chunks via `pool.imap_unordered` e os funde com `total.update(result)`, produzindo um contador global. Ao final, o Top 10 de IPs com mais falhas é exibido.
+
+```python
+with Pool(n_workers) as pool:
+    for result in pool.imap_unordered(process_chunk, ranges, chunksize=2):
+        total.update(result)
+```
+
+O uso de `imap_unordered` (em vez de `map`) permite que o processo pai comece a agregar resultados assim que qualquer worker terminar, sem precisar esperar todos.
 
 ---
 
-# ▶ Como Executar
+### Etapa 5 — Cálculo de Speedup e Eficiência
 
-## 1. Instalar Python
+Ao final de cada execução, o script calcula automaticamente:
 
-Verifique a instalação:
+```
+Speedup   = tempo_1_processo / tempo_N_processos
+Eficiência = Speedup / N
+```
+
+---
+
+## ▶ Como Executar
+
+### 1. Verificar a instalação do Python
 
 ```bash
 python --version
-```
-
-ou
-
-```bash
+# ou
 python3 --version
 ```
 
----
-
-## 2. Preparar os Arquivos
+### 2. Preparar os arquivos
 
 Mantenha na mesma pasta:
 
 ```text
-access.log
-client_hostname.csv
+access_log_base_maior.log
 algoritmo.py
 paralelismo.py
 ```
 
----
-
-## 3. Executar a Versão Sequencial
+### 3. Executar a versão sequencial
 
 ```bash
 python algoritmo.py
 ```
 
-ou
-
-```bash
-python3 algoritmo.py
-```
-
----
-
-## 4. Executar a Versão Paralela
+### 4. Executar a versão paralela
 
 ```bash
 python paralelismo.py
 ```
 
-ou
+O script testará automaticamente as configurações de 1, 2, 4, 8 e 12 processos e exibirá os resultados de desempenho ao final.
 
-```bash
-python3 paralelismo.py
-```
+### 5. Gerar massa de testes
 
----
-
-## 5. Gerar Massa de Testes
-
-Configure os caminhos em:
+Configure os caminhos no `multiplicador.py`:
 
 ```python
-path_origem
-path_destino
+path_origem  = "access.log"
+path_destino = "access_log_base_maior.log"
 ```
 
-e execute:
+E execute:
 
 ```bash
 python multiplicador.py
@@ -217,69 +238,56 @@ python multiplicador.py
 
 ---
 
-# 📈 Resultados Obtidos
+## 📈 Resultados Obtidos
 
-O projeto permite comparar o desempenho da execução sequencial com a execução paralela utilizando diferentes quantidades de processos.
+Medições realizadas sobre o arquivo `access_log_base_maior.log`:
 
-```text
-1 processo  → 258,27 segundos
-2 processo → 143,83 segundos
-4 processo → 86,17 segundos
-8 processo → 61,45 segundos
-12 processo → 52,55 segundos
-```
+| Processos | Tempo (s) | Speedup | Eficiência |
+|-----------|-----------|---------|------------|
+| 1         | 94,75     | 1,00x   | 100,0%     |
+| 2         | 51,54     | 1,84x   | 91,9%      |
+| 4         | 29,95     | 3,16x   | 79,1%      |
+| 8         | 19,23     | 4,93x   | 61,6%      |
+| 12        | 17,28     | 5,48x   | 45,7%      |
 
-Esses resultados permitem avaliar o impacto do paralelismo na análise de grandes arquivos de log.
+A queda de eficiência com mais processos é esperada e explica-se pelo overhead de comunicação entre processos (IPC), pelo custo de abertura de múltiplos descritores de arquivo via `mmap`, e pelo gargalo de disco compartilhado. O ganho de velocidade, no entanto, se mantém positivo até 12 processos.
 
 ---
-# Speedup
 
-```text
-1 processo  → 1,00x (Base)
-2 processo → 1,80x
-4 processo → 3,00x
-8 processo → 4,20x
-12 processo → 4,91x
-```
----
-# Eficiência
-
-```text
-1 processo  → 100,0%
-2 processo → 90,0%
-4 processo → 75,0%
-8 processo → 53,0%
-12 processo → 41,5%
-```
----
-# 📉 Gráficos de Desempenho
+## 📉 Gráficos de Desempenho
 
 ![Gráfico de Speedup e Eficiência](speedup_eficiencia.png)
 
 ---
 
-# 🧠 Conceitos Aplicados
+## 🧠 Decisões de Projeto
 
-- Programação Concorrente
-- Paralelismo
-- Multiprocessamento
-- Processamento de Logs
-- Estruturas de Dados
-- Expressões Regulares
-- Balanceamento de Carga
-- Benchmark de Desempenho
-- Análise de Dados
+### Por que `mmap` em vez de leitura linha a linha?
+
+A leitura com `mmap` delega o controle do buffer ao sistema operacional, que pode usar cache de páginas e prefetch de disco. Em arquivos grandes (centenas de MB), isso reduz significativamente o tempo de I/O em comparação com `file.readline()` em loop.
+
+### Por que `n_workers * 4` chunks?
+
+Criar mais chunks do que processos garante um balanceamento de carga dinâmico: processos que terminam mais rápido (chunks menores ou com menos matches) já pegam o próximo trabalho disponível, em vez de ficarem ociosos esperando o mais lento.
+
+### Por que `imap_unordered`?
+
+O `map` do `Pool` espera todos os resultados antes de retornar. O `imap_unordered` entrega cada resultado assim que o worker termina, permitindo que a redução comece imediatamente e reduzindo o tempo de espera do processo pai.
+
+### Por que `time.perf_counter`?
+
+É o timer de maior resolução disponível no Python para benchmarking de parede (*wall time*), mais preciso que `time.time()` em sistemas Windows.
 
 ---
 
-# 🔗 Base de Dados
+## 🔗 Base de Dados
 
 Dataset utilizado:
 
-https://www.kaggle.com/datasets/eliasdabbas/web-server-access-logs/data
+[https://www.kaggle.com/datasets/eliasdabbas/web-server-access-logs/data](https://www.kaggle.com/datasets/eliasdabbas/web-server-access-logs/data)
 
 ---
 
-# 📄 Licença
+## 📄 Licença
 
-Projeto desenvolvido exclusivamente para fins acadêmicos na disciplina de Programação Distribuída e Concorrente do curso de Análise e Desenvolvimento de Sistemas.
+Projeto desenvolvido exclusivamente para fins acadêmicos na disciplina de **Programação Distribuída e Concorrente** do curso de **Análise e Desenvolvimento de Sistemas**.
