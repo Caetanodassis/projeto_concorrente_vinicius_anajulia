@@ -49,26 +49,15 @@ de hardware multi-core de alto desempenho
 
 | Tecnologia | Finalidade |
 |------------|------------|
-| Python 3 | Linguagem base devido à
-versatilidade e ao ecossistema de
-bibliotecas robustas para
-processamento concorrente |
-| `RE` (Regex) | Expressões regulares altamente
-otimizadas e compiladas para
-extração ultrarrápida de IPs e status
-HTTP |
-| `Memmory-Mapped I/O` | Utilização de mmap para a leitura de
-ficheiros diretamente no espaço de
-endereçamento de memória do
-kernel. |
-| `collections.Counter` | Contagem eficiente de IPs |
-| `Multiprocessing.Pool` | Implementação de paralelismo real
-ultrapassando os limites do GIL
-(Global Interpreter Lock) no Python. |
-| `os` | Obtenção do tamanho do arquivo e detecção de CPUs |
-| `time.perf_counter` | Benchmark de alta precisão |
+| Python 3 | Linguagem principal |
+| RE (Regex) | Extração de IPs e códigos HTTP |
+| Memmory-Mapped I/O | Leitura de arquivo via memória mapeada |
+| collections.Counter | Contagem eficiente de IPs |
+| Multiprocessing.Pool | Execução paralela com múltiplos processos |
+| os | Obtenção do tamanho do arquivo e detecção de CPUs |
+| time.perf_counter | Benchmark de alta precisão |
 
----
+--
 
 ## 💻 Ambiente Experimental
 
