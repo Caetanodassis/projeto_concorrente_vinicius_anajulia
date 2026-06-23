@@ -25,11 +25,11 @@
 ## 📌 Objetivo do Projeto
 
 - Análise Massiva: Processamento de grandes volumes de logs de servidores
-(Apache/Nginx) sem sobrecarregar a memória RAM do sistema
+(Apache/Nginx) sem sobrecarregar a memória RAM do sistema.
 - Segurança e Auditoria: Identificação de erros HTTP 4xx e 5xx para a rápida deteção de
 comportamentos suspeitos e falhas críticas de infraestrutura.
 - Benchmarking: Avaliação empírica detalhada de Speedup e Eficiência em arquiteturas
-de hardware multi-core de alto desempenho
+de hardware multi-core de alto desempenho.
 
 ---
 
@@ -57,7 +57,7 @@ de hardware multi-core de alto desempenho
 | os | Obtenção do tamanho do arquivo e detecção de CPUs |
 | time.perf_counter | Benchmark de alta precisão |
 
---
+---
 
 ## 💻 Ambiente Experimental
 
