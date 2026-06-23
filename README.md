@@ -24,16 +24,12 @@
 
 ## 📌 Objetivo do Projeto
 
-Este projeto analisa grandes volumes de logs de servidores web para identificar requisições com falha (HTTP 4xx e 5xx), detectar possíveis padrões de comportamento suspeito e avaliar os ganhos de desempenho obtidos através do processamento paralelo.
-
-O sistema aplica na prática os seguintes conceitos:
-
-- Programação Concorrente e Paralelismo
-- Multiprocessamento com `multiprocessing.Pool`
-- I/O ultra eficiente com `mmap` (memory-mapped file)
-- Processamento de Grandes Volumes de Dados
-- Análise de Logs com Expressões Regulares
-- Balanceamento de Carga e Benchmark de Desempenho
+- Análise Massiva: Processamento de grandes volumes de logs de servidores
+(Apache/Nginx) sem sobrecarregar a memória RAM do sistema
+- Segurança e Auditoria: Identificação de erros HTTP 4xx e 5xx para a rápida deteção de
+comportamentos suspeitos e falhas críticas de infraestrutura.
+- Benchmarking: Avaliação empírica detalhada de Speedup e Eficiência em arquiteturas
+de hardware multi-core de alto desempenho
 
 ---
 
@@ -53,11 +49,22 @@ O sistema aplica na prática os seguintes conceitos:
 
 | Tecnologia | Finalidade |
 |------------|------------|
-| Python 3 | Linguagem principal |
-| `re` (Regex) | Extração de IPs e códigos HTTP |
-| `mmap` | Leitura de arquivo via memória mapeada |
+| Python 3 | Linguagem base devido à
+versatilidade e ao ecossistema de
+bibliotecas robustas para
+processamento concorrente |
+| `RE` (Regex) | Expressões regulares altamente
+otimizadas e compiladas para
+extração ultrarrápida de IPs e status
+HTTP |
+| `Memmory-Mapped I/O` | Utilização de mmap para a leitura de
+ficheiros diretamente no espaço de
+endereçamento de memória do
+kernel. |
 | `collections.Counter` | Contagem eficiente de IPs |
-| `multiprocessing.Pool` | Execução paralela com múltiplos processos |
+| `Multiprocessing.Pool` | Implementação de paralelismo real
+ultrapassando os limites do GIL
+(Global Interpreter Lock) no Python. |
 | `os` | Obtenção do tamanho do arquivo e detecção de CPUs |
 | `time.perf_counter` | Benchmark de alta precisão |
 
@@ -258,6 +265,17 @@ A queda de eficiência com mais processos é esperada e explica-se pelo overhead
 
 ![Gráfico de Speedup e Eficiência](speedup_eficiencia.png)
 
+### 📉 Resumo da Análise dos Gráficos de Desempenho
+
+[cite_start]O comportamento dos testes de escalabilidade demonstra na prática o impacto de dois conceitos centrais da computação concorrente[cite: 98, 99]:
+
+1. **Gráfico de Speedup (Ganho de Velocidade):**
+   * [cite_start]**Aceleração Real:** O tempo de execução reduziu drasticamente de **94,75 segundos** (1 processo) para **17,28 segundos** (12 processos), gerando um ganho de velocidade real de **5,48x**[cite: 95].
+   * [cite_start]**Rendimento Decrescente:** O ganho é quase linear (próximo ao ideal) entre 2 e 4 processos[cite: 95, 102]. [cite_start]Contudo, ao subir para 8 e 12 processos, a curva de *Speedup real* começa a inclinar e estabilizar, distanciando-se do *Speedup ideal*[cite: 95, 102].
+
+2. **Gráfico de Eficiência (Aproveitamento do Hardware):**
+   * [cite_start]**Perda de Eficiência:** A eficiência do sistema cai progressivamente de **100%** para **45,7%** à medida que mais processos são injetados[cite: 95].
+   * **Validação da Lei de Amdahl:** Essa queda ocorre devido ao *overhead* gerado pelo sistema operacional. [cite_start]O aumento de processos gera disputa física por leitura de disco (*gargalo de I/O*), custo com troca de contexto no kernel e tempo gasto na Comunicação Interprocessos (IPC) para unificar os dados[cite: 95]. [cite_start]Isso prova que o ganho máximo é limitado pela porção sequencial de coordenação do algoritmo[cite: 95].
 ---
 
 ## 🧠 Decisões de Projeto
