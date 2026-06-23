@@ -256,15 +256,15 @@ A queda de eficiência com mais processos é esperada e explica-se pelo overhead
 
 ### 📉 Resumo da Análise dos Gráficos de Desempenho
 
-[cite_start]O comportamento dos testes de escalabilidade demonstra na prática o impacto de dois conceitos centrais da computação concorrente[cite: 98, 99]:
+O comportamento dos testes de escalabilidade demonstra na prática o impacto de dois conceitos centrais da computação concorrente:
 
 1. **Gráfico de Speedup (Ganho de Velocidade):**
-   * [cite_start]**Aceleração Real:** O tempo de execução reduziu drasticamente de **94,75 segundos** (1 processo) para **17,28 segundos** (12 processos), gerando um ganho de velocidade real de **5,48x**[cite: 95].
-   * [cite_start]**Rendimento Decrescente:** O ganho é quase linear (próximo ao ideal) entre 2 e 4 processos[cite: 95, 102]. [cite_start]Contudo, ao subir para 8 e 12 processos, a curva de *Speedup real* começa a inclinar e estabilizar, distanciando-se do *Speedup ideal*[cite: 95, 102].
+   * **Aceleração Real:** O tempo de execução reduziu drasticamente de **94,75 segundos** (1 processo) para **17,28 segundos** (12 processos), gerando um ganho de velocidade real de **5,48x**.
+   * **Rendimento Decrescente:** O ganho é quase linear (próximo ao ideal) entre 2 e 4 processos. Contudo, ao subir para 8 e 12 processos, a curva de *Speedup real* começa a inclinar e estabilizar, distanciando-se do *Speedup ideal*.
 
 2. **Gráfico de Eficiência (Aproveitamento do Hardware):**
-   * [cite_start]**Perda de Eficiência:** A eficiência do sistema cai progressivamente de **100%** para **45,7%** à medida que mais processos são injetados[cite: 95].
-   * **Validação da Lei de Amdahl:** Essa queda ocorre devido ao *overhead* gerado pelo sistema operacional. [cite_start]O aumento de processos gera disputa física por leitura de disco (*gargalo de I/O*), custo com troca de contexto no kernel e tempo gasto na Comunicação Interprocessos (IPC) para unificar os dados[cite: 95]. [cite_start]Isso prova que o ganho máximo é limitado pela porção sequencial de coordenação do algoritmo[cite: 95].
+   * **Perda de Eficiência:** A eficiência do sistema cai progressivamente de **100%** para **45,7%** à medida que mais processos são injetados.
+   * **Validação da Lei de Amdahl:** Essa queda ocorre devido ao *overhead* gerado pelo sistema operacional. O aumento de processos gera disputa física por leitura de disco (*gargalo de I/O*), custo com troca de contexto no kernel e tempo gasto na Comunicação Interprocessos (IPC) para unificar os dados. Isso prova que o ganho máximo é limitado pela porção sequencial de coordenação do algoritmo.
 ---
 
 ## 🧠 Decisões de Projeto
