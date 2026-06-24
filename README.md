@@ -22,8 +22,6 @@
 
 ---
 
-## 📌 Objetivo do Projeto
-
 ## 🎯 Objetivo do Projeto
 
 O objetivo deste software é monitorar e analisar de forma automatizada logs de servidores web para identificar vulnerabilidades de segurança e falhas estruturais internas. Através do rastreamento de requisições anômalas e do mapeamento de IPs recorrentes, o sistema atua diretamente na detecção precoce de ameaças externas (como ataques de força bruta ou DoS) e no diagnóstico de erros de infraestrutura.
