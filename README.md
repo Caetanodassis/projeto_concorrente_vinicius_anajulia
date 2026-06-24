@@ -24,12 +24,15 @@
 
 ## 📌 Objetivo do Projeto
 
-- Análise Massiva: Processamento de grandes volumes de logs de servidores
-(Apache/Nginx) sem sobrecarregar a memória RAM do sistema.
-- Segurança e Auditoria: Identificação de erros HTTP 4xx e 5xx para a rápida deteção de
-comportamentos suspeitos e falhas críticas de infraestrutura.
-- Benchmarking: Avaliação empírica detalhada de Speedup e Eficiência em arquiteturas
-de hardware multi-core de alto desempenho.
+## 🎯 Objetivo do Projeto
+
+O objetivo deste software é monitorar e analisar de forma automatizada logs de servidores web para identificar vulnerabilidades de segurança e falhas estruturais internas. Através do rastreamento de requisições anômalas e do mapeamento de IPs recorrentes, o sistema atua diretamente na detecção precoce de ameaças externas (como ataques de força bruta ou DoS) e no diagnóstico de erros de infraestrutura.
+
+Para viabilizar essa análise em cenários de alta criticidade, o projeto foca em três pilares fundamentais:
+
+* **Processamento de Alto Desempenho (Análise Massiva):** Capacidade de processar volumes massivos de logs (Apache/Nginx) de forma otimizada, mitigando o consumo de memória RAM por meio de técnicas de concorrência e processamento paralelo.
+* **Segurança e Auditoria Avançada:** Varredura detalhada e categorização de erros HTTP (famílias 4xx e 5xx) para a rápida identificação de comportamentos suspeitos, mapeamento de origens maliciosas e mitigação de falhas críticas.
+* **Benchmarking e Escalabilidade:** Avaliação empírica do comportamento do software em arquiteturas de hardware multi-core, aferindo métricas rigorosas de Speedup e Eficiência para validar a escalabilidade do sistema.
 
 ---
 
@@ -47,15 +50,13 @@ de hardware multi-core de alto desempenho.
 
 ## 🛠 Tecnologias Utilizadas
 
-| Tecnologia | Finalidade |
-|------------|------------|
-| Python 3 | Linguagem principal |
-| RE (Regex) | Extração de IPs e códigos HTTP |
-| Memmory-Mapped I/O | Leitura de arquivo via memória mapeada |
-| collections.Counter | Contagem eficiente de IPs |
-| Multiprocessing.Pool | Execução paralela com múltiplos processos |
-| os | Obtenção do tamanho do arquivo e detecção de CPUs |
-| time.perf_counter | Benchmark de alta precisão |
+* **Python 3:** Linguagem base devido à versatilidade e ao ecossistema de bibliotecas robustas para processamento concorrente.
+* **Regex(re):** Expressões regulares altamente otimizadas e compiladas para extração ultrarrápida de IPs e status HTTP.
+* **Memmory-Mapped:** Utilização de mmap para a leitura de ficheiros diretamente no espaço de endereçamento de memória do kernel.
+* **Collections.Counter:** Contagem eficiente de IPs.
+* **Multiprocessing.Pool:** Implementação de paralelismo real ultrapassando os limites do GIL (Global Interpreter Lock) no Python.
+* **Módulo OS:** Obtenção do tamanho do arquivo e detecção de CPUs. 
+* **Time.perf_counter:** Benchmark de alta precisão.
 
 ---
 
