@@ -51,9 +51,9 @@ Para viabilizar essa análise em cenários de alta criticidade, o projeto foca e
 * **Python 3:** Linguagem base devido à versatilidade e ao ecossistema de bibliotecas robustas para processamento concorrente.
 * **Regex(re):** Expressões regulares altamente otimizadas e compiladas para extração ultrarrápida de IPs e status HTTP.
 * **Memmory-Mapped:** Utilização de mmap para a leitura de ficheiros diretamente no espaço de endereçamento de memória do kernel.
-* **Collections.Counter:** Contagem eficiente de IPs.
+* **Collections.Counter(Contagem eficiente de IPs):** É uma subclasse de dicionário do Python criada especificamente para contar objetos mutáveis ou elementos repetidos.
 * **Multiprocessing.Pool:** Implementação de paralelismo real ultrapassando os limites do GIL (Global Interpreter Lock) no Python.
-* **Módulo OS:** Obtenção do tamanho do arquivo e detecção de CPUs. 
+* **Módulo OS(obtenção do tamanho do arquivo e detecção de CPUs):** É a biblioteca nativa do Python que serve para interagir diretamente com o Sistema Operacional (Windows, Linux, Mac). Ele é usado para duas funções críticas de infraestrutura - Descobre o tamanho exato do arquivo de log em bytes para que a lógica do `get_chunks` possa fatiar o arquivo matematicamente e Detecta dinamicamente quantos núcleos lógicos o processador possui, permitindo que o script saiba o limite saudável de processos a serem criados no `multiprocessing.Pool`. 
 * **Time.perf_counter:** Benchmark de alta precisão.
 
 ---
