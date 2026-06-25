@@ -239,12 +239,6 @@ python multiplicador.py
 ```
 
 ---
-# 5. Cálculo de Speedup e Eficiência
-
-### Fórmulas
-* **Speedup(p) = T(1) / T(p)**
-* **Eficiência(p) = Speedup(p) / p**
----
 
 ## 📈 Resultados Obtidos
 
