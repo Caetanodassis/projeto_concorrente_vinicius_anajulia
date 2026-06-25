@@ -34,7 +34,7 @@ Para viabilizar essa análise em cenários de alta criticidade, o projeto foca e
 
 ---
 
-## 🚀 Funcionalidades
+## 📌 Funcionalidades
 
 - Leitura de arquivos de log via **memory-mapped I/O** (`mmap`), sem carregar o arquivo inteiro na RAM
 - Divisão automática do arquivo em **chunks por byte-range**, garantindo distribuição uniforme entre processos
@@ -72,6 +72,7 @@ Para viabilizar essa análise em cenários de alta criticidade, o projeto foca e
 | Memória RAM | 16 GB |
 | Sistema Operacional | Windows 11 |
 | Linguagem | Python 3.x |
+| Compilador / Versão | VSCODE |
 
 ---
 
@@ -238,6 +239,12 @@ python multiplicador.py
 ```
 
 ---
+# 5. Cálculo de Speedup e Eficiência
+
+### Fórmulas
+* **Speedup(p) = T(1) / T(p)**
+* **Eficiência(p) = Speedup(p) / p**
+---
 
 ## 📈 Resultados Obtidos
 
@@ -297,6 +304,12 @@ O `map` do `Pool` espera todos os resultados antes de retornar. O `imap_unordere
 Dataset utilizado:
 
 [https://www.kaggle.com/datasets/eliasdabbas/web-server-access-logs/data](https://www.kaggle.com/datasets/eliasdabbas/web-server-access-logs/data)
+
+---
+
+## ✅ Conclusão
+
+O projeto atingiu o objetivo de criar um analisador de logs escalável e de alto desempenho, demonstrando na prática como a combinação de mmap com multiprocessing otimiza o uso de memória RAM e acelera o processamento de grandes volumes de dados. Os testes empíricos validaram os conceitos de computação concorrente ao reduzir o tempo de execução de 94,75 segundos para 17,28 segundos (um ganho de 5,48x com 12 processos), enquanto as métricas de Speedup e Eficiência comprovaram a Lei de Amdahl e os limites físicos impostos pelo overhead do sistema operacional e pelo gargalo de I/O em disco. Em suma, o software consolidou-se como uma ferramenta robusta, viável e economicamente eficiente para auditoria de segurança e diagnóstico de falhas em infraestruturas web de grande porte.
 
 ---
 
