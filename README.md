@@ -191,52 +191,39 @@ Eficiência = Speedup / N
 
 ## ▶ Como Executar
 
-### 1. Verificar a instalação do Python
-
+### 1. Pré-requisitos
+Certifique-se de ter o Python 3.x instalado em sua máquina.
 ```bash
 python --version
-# ou
-python3 --version
 ```
 
-### 2. Preparar os arquivos
+### 2. Obtenção do Dataset Base
 
-Mantenha na mesma pasta:
+Faça o download do dataset público que serve como base para a pesquisa:
 
-```text
-access_log_base_maior.log
-algoritmo.py
-paralelismo.py
-```
+Fonte: Web Server Access Logs (Kaggle)
 
-### 3. Executar a versão sequencial
+Extraia o arquivo access.log e coloque-o na raiz do projeto.
 
-```bash
-python algoritmo.py
-```
 
-### 4. Executar a versão paralela
+### 3. Geração da Massa de Dados para Testes
 
-```bash
-python paralelismo.py
-```
-
-O script testará automaticamente as configurações de 1, 2, 4, 8 e 12 processos e exibirá os resultados de desempenho ao final.
-
-### 5. Gerar massa de testes
-
-Configure os caminhos no `multiplicador.py`:
-
-```python
-path_origem  = "access.log"
-path_destino = "access_log_base_maior.log"
-```
-
-E execute:
+Para avaliar a escalabilidade e o limite físico do hardware (Speedup e Eficiência), é necessário um volume massivo de dados.
+Abra o script multiplicador.py, verifique se os caminhos de origem e destino estão corretos e execute a replicação:
 
 ```bash
 python multiplicador.py
 ```
+Nota: Este script lerá o arquivo access.log e gerará o arquivo access_log_base_maior.log contendo as replicações necessárias para saturar os núcleos de processamento durante os testes de concorrência.
+
+### 4. Execução dos Testes de Desempenho (Paralelismo)
+
+Com a base expandida pronta, inicie o ambiente de simulação concorrente.
+
+```bash
+python paralelismo.py
+```
+O sistema fatiará o arquivo via memory-mapped I/O e executará a análise escalonando dinamicamente entre 1, 2, 4, 8 e 12 processos. Ao final da varredura, o script apresentará o ranking das anomalias e a tabela comparativa de tempo de execução, Speedup e Eficiência.
 
 ---
 
