@@ -258,7 +258,18 @@ A queda de eficiência com mais processos é esperada e explica-se pelo overhead
 
 ## 📉 Gráficos de Desempenho
 
-![Gráfico de Speedup e Eficiência](speedup_eficiencia.png)
+Abaixo estão os gráficos detalhados que ilustram o comportamento do sistema em relação ao tempo de execução, ganho de velocidade (speedup) e aproveitamento do hardware (eficiência) conforme o aumento do número de processos.
+
+### 1. Tempo de Execução vs. Processos
+![Gráfico de Tempo de Execução](tempo_processo.png)
+
+### 2. Cálculo de Speedup
+![Gráfico de Speedup](speedup_processo.png)
+
+### 3. Eficiência vs. Threads
+![Gráfico de Eficiência](eficiencia_processo.png)
+
+---
 
 ### 📉 Resumo da Análise dos Gráficos de Desempenho
 
