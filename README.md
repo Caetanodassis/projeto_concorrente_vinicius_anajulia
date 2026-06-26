@@ -225,6 +225,12 @@ python paralelismo.py
 ```
 O sistema fatiará o arquivo via memory-mapped I/O e executará a análise escalonando dinamicamente entre 1, 2, 4, 8 e 12 processos. Ao final da varredura, o script apresentará o ranking das anomalias e a tabela comparativa de tempo de execução, Speedup e Eficiência.
 
+### 5. Cálculo de Speedup e Eficiência
+
+### Fórmulas
+* **Speedup(p) = T(1) / T(p)**
+* **Eficiência(p) = Speedup(p) / p**
+
 ---
 
 ## 📈 Resultados Obtidos
